@@ -46,7 +46,7 @@ exports.findingXYZ = function(req, res){
 	const x = 1, 
 	y = 6, 
 	z = 7
-	console.log(`x = ${nForm(x)}`)
+	console.log(`x = ${nForm(x)}`) 
 	console.log(`y = ${nForm(y)}`)
 	console.log(`z = ${nForm(z)}`)
 	res.send("under construction")
