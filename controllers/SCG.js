@@ -1,5 +1,12 @@
 const request = require('request')
 const math = require('mathjs')
+const line = require('@line/bot-sdk')
+
+/*const config = {
+	channelAccessToken: process.env.CHANNEL_ACCESS_TOKEN,
+	channelSecret: process.env.CHANNEL_SECRET,
+}*/
+
 
 /*
 	Find 2nd degree polynomial formula using matrix

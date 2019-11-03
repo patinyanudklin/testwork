@@ -8,4 +8,6 @@ app.set('view engine', 'pug')
 app.get('/findrestaurant',  scgController.findingRestaurantsInBangsue)
 app.get('/', scgController.findingXYZ)
 
-app.listen(3000)
+const PORT = process.env.PORT || 3000
+
+app.listen(PORT)
