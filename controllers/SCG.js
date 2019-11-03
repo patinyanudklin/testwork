@@ -102,7 +102,7 @@ function handleEvent(event) {
 		return Promise.resolve(null)
   	}
 
-  	let reply = ""
+  	let reply = event.message.text
   	if(event.message.text.includes("Shiorin"))
   		reply = "Oh! You remembered my name!"
   	if(event.message.text.includes("Sad"))
