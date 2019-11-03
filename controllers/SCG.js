@@ -2,10 +2,10 @@ const request = require('request')
 const math = require('mathjs')
 const line = require('@line/bot-sdk')
 
-/*const config = {
+const config = {
 	channelAccessToken: process.env.CHANNEL_ACCESS_TOKEN,
 	channelSecret: process.env.CHANNEL_SECRET,
-}*/
+}
 
 
 /*
@@ -49,15 +49,14 @@ exports.findingXYZ = function(req, res){
 	console.log(`x = ${nForm(x)}`)
 	console.log(`y = ${nForm(y)}`)
 	console.log(`z = ${nForm(z)}`)
-	console.log(process.env.CHANNEL_SECRET)
 	res.send("under construction")
 }
 
 exports.findingRestaurantsInBangsue = function(req, res){
 	//const url = 'https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=%E0%B8%AD%E0%B8%B2%E0%B8%AB%E0%B8%B2%E0%B8%A3&inputtype=textquery&fields=formatted_address,geometry,icon,name,types&locationbias=rectangle:13.797062,100.505889|13.849573,100.545197&key=AIzaSyDr6n-dNDoMM8PavoXgwKxBofT8Rez0Z7A'
 	
-
-	const googleAPIKey = 'AIzaSyDr6n-dNDoMM8PavoXgwKxBofT8Rez0Z7A'
+	// Key
+	const googleAPIKey = process.env.GOOGLE_API_KEY
 	// Bangsue location
 	const lat = '13.825820'
 	const long = '100.523141'
@@ -73,5 +72,23 @@ exports.findingRestaurantsInBangsue = function(req, res){
 			res.render('mainpage', {output})
 		}
 		res.send('Error!')
+	})
+}
+
+exports.lineWebHook = function(req, res){
+	Promise
+		.all(req.body.events.map(handleEvent))
+    	.then((result) => res.json(result))
+}
+
+const client = new line.Client(config)
+function handleEvent(event) {
+	if (event.type !== 'message' || event.message.type !== 'text') {
+		return Promise.resolve(null)
+  	}
+
+	return client.replyMessage(event.replyToken, {
+		type: 'text',
+		text: event.message.text
 	})
 }
