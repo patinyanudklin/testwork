@@ -75,19 +75,24 @@ exports.findingRestaurantsInBangsue = function(req, res){
 }
 
 exports.lineWebHook = async function(req, res){
-	Promise
+	await Promise
 		.all(req.body.events.map(handleEvent))
-    	.then((result) => res.json(result))
+	    .then((result) => res.json(result))
+	    .catch((err) => {
+	      console.error(err)
+	      res.status(500).end()
+    })
 }
 
 const client = new line.Client(config)
+
 function handleEvent(event) {
 	if (event.type !== 'message' || event.message.type !== 'text') {
 		return Promise.resolve(null)
   	}
+	// create a echoing text message
+  	const echo = { type: 'text', text: event.message.text };
 
-	return client.replyMessage(event.replyToken, {
-		type: 'text',
-		text: event.message.text
-	})
+  	// use reply API
+  	return client.replyMessage(event.replyToken, echo);
 }
