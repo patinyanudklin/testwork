@@ -5,6 +5,7 @@ const app = express()
 app.set('views', './views')
 app.set('view engine', 'pug')
 
-app.get('/',  scgController.findingRestaurantsInBangsue)
+app.get('/findrestaurant',  scgController.findingRestaurantsInBangsue)
+app.get('/', scgController.findingXYZ)
 
 app.listen(3000)

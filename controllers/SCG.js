@@ -1,18 +1,47 @@
 const request = require('request')
-const { StringDecoder } = require('string_decoder');
-const decoder = new StringDecoder('utf8');
+const math = require('mathjs')
 
-var findXYZFn = function(sequences)
+/*
+	Input: 
+		- any 3 consecutive terms of the 2nd degree polynomial sequence
+		- first of the consecutive terms 
+	Example:
+		s2, s3, s4, ... = 5, 9, 15, ...
+		find formula using s2, s3, s4 by calling get2ndDgPolynomialFormula(5, 9, 15, 2)
+*/
+var get2ndDgPolynomialFormula = function( s1, s2, s3, firstTerm)
 {
-	
+	// using matrix to calculate
+	const A = math.matrix([
+		[1, firstTerm, firstTerm*firstTerm],
+		[1, firstTerm+1, (firstTerm+1)*(firstTerm+1)],
+		[1, firstTerm+2, (firstTerm+2)*(firstTerm+2)]])
+	let B = math.matrix([[s1],[s2],[s3]])
+
+	// inverse matrix A
+	let invA = math.inv(A)
+	// inv A x B
+	let result = math.multiply(invA, B)
+
+	// return function that get the number of term, then return the value of that term regarding the normal form.
+	let Sn = function (n){
+		// formula of the input 2nd degree polynomial sequence
+		return result._data[0][0] + n*result._data[1][0] + n*n*result._data[2][0]
+	}
+
+	return Sn
 }
 
 exports.findingXYZ = function(req, res){
-	res.render("mainpage")
+	let nForm = get2ndDgPolynomialFormula(5,9,15, 2)
+	const x = 1, 
+	y = 6, 
+	z = 7
+	console.log(`x = ${nForm(x)}`)
+	console.log(`y = ${nForm(y)}`)
+	console.log(`z = ${nForm(z)}`)
+	res.send("under construction")
 }
-
-
-
 
 exports.findingRestaurantsInBangsue = function(req, res){
 	//const url = 'https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=%E0%B8%AD%E0%B8%B2%E0%B8%AB%E0%B8%B2%E0%B8%A3&inputtype=textquery&fields=formatted_address,geometry,icon,name,types&locationbias=rectangle:13.797062,100.505889|13.849573,100.545197&key=AIzaSyDr6n-dNDoMM8PavoXgwKxBofT8Rez0Z7A'
@@ -29,8 +58,9 @@ exports.findingRestaurantsInBangsue = function(req, res){
 	request(url, function(error, response, body){
 		if(!error&& response.statusCode == 200){
 			let jsonResult = JSON.parse(body);
-			let jsonText = JSON.stringify(jsonResult, null, 4)
-			res.render('mainpage', {jsonText})
+			let output = JSON.stringify(jsonResult, null, 4)
+			res.render('mainpage', {output})
 		}
+		res.send('Error!')
 	})
 }
