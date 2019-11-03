@@ -19,7 +19,7 @@ const config = {
 		s2, s3, s4, ... = 5, 9, 15, ...
 		find formula using s2, s3, s4 by calling get2ndDgPolynomialFormula(5, 9, 15, 2)
 */
-var get2ndDgPolynomialFormula = function( s1, s2, s3, firstTerm)
+var get2ndOrderPolynomialFormula = function( s1, s2, s3, firstTerm)
 {
 	// using matrix to calculate
 	const A = math.matrix([
@@ -50,7 +50,7 @@ exports.findingXYZ = function(req, res){
 		const result = ``
 		res.render('findxyz', {result})
 	}
-	let nForm = get2ndDgPolynomialFormula(parseInt(s1),parseInt(s2),parseInt(s3), parseInt(ft)) 
+	let nForm = get2ndOrderPolynomialFormula(parseInt(s1),parseInt(s2),parseInt(s3), parseInt(ft)) 
 	// term
 	const x = 1, 
 	y = 6, 
