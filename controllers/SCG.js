@@ -1,6 +1,8 @@
 const request = require('request')
 const math = require('mathjs')
 const line = require('@line/bot-sdk')
+const bodyParser = require('body-parser')
+const urlencodedParser = bodyParser.urlencoded({extended:true})
 
 const config = {
 	channelAccessToken: process.env.CHANNEL_ACCESS_TOKEN,
@@ -8,10 +10,10 @@ const config = {
 }
 
 /*
-	Find 2nd degree polynomial formula using matrix
+	Find 2nd order polynomial formula using matrix
 	ref: https://www.geeksforgeeks.org/finding-nth-term-polynomial-sequence/
 	Input: 
-		- any 3 consecutive terms of the 2nd degree polynomial sequence
+		- any 3 consecutive terms of the 2nd order polynomial sequence
 		- first of the consecutive terms 
 	Example:
 		s2, s3, s4, ... = 5, 9, 15, ...
@@ -33,7 +35,7 @@ var get2ndDgPolynomialFormula = function( s1, s2, s3, firstTerm)
 
 	// return function that get the number of term, then return the value of that term regarding the normal form.
 	let Sn = function (n){
-		// formula of the input 2nd degree polynomial sequence
+		// formula of the input 2nd order polynomial sequence
 		return result._data[0][0] + n*result._data[1][0] + n*n*result._data[2][0]
 	}
 
@@ -41,14 +43,26 @@ var get2ndDgPolynomialFormula = function( s1, s2, s3, firstTerm)
 }
 
 exports.findingXYZ = function(req, res){
-	let nForm = get2ndDgPolynomialFormula(5,9,15, 2)
+
+	let {s1,s2,s3, ft} = req.query
+	if(typeof s1 == 'undefined' || typeof s2 == 'undefined' || typeof s3 == 'undefined' || typeof ft == 'undefined')
+	{
+		console.log('something undefined')
+		s1 = 5
+		s2 = 9
+		s3 = 15
+		ft = 2
+	}
+	//console.log(`${s1}, ${s2}, ${s3}, ${ft}`)
+	let nForm = get2ndDgPolynomialFormula(parseInt(s1),parseInt(s2),parseInt(s3), parseInt(ft)) 
+	// term
 	const x = 1, 
 	y = 6, 
 	z = 7
-	console.log(`x = ${nForm(x)}`) 
-	console.log(`y = ${nForm(y)}`)
-	console.log(`z = ${nForm(z)}`)
-	res.send("under construction")
+
+	// term
+	const t = parseInt(ft)
+	res.send(`sequence where s${t}, s${t+1}, s${t+2} = ${s1}, ${s2}, ${s3} | x = ${nForm(x)}, y = ${nForm(y)}, z = ${nForm(z)}`)
 }
 
 exports.findingRestaurantsInBangsue = function(req, res){
@@ -66,16 +80,17 @@ exports.findingRestaurantsInBangsue = function(req, res){
 	
 	request(url, function(error, response, body){
 		if(!error&& response.statusCode == 200){
-			let jsonResult = JSON.parse(body);
-			let output = JSON.stringify(jsonResult, null, 4)
-			res.render('mainpage', {output})
+			let output = JSON.parse(body);
+			//let output = JSON.stringify(jsonResult, null, 4)
+			res.render('restaurant', {output})
 		}
-		res.send('Error!')
+		else
+			res.send('Error!')
 	})
 }
 
 exports.lineWebHook = async function(req, res){
-	await Promise
+	Promise
 		.all(req.body.events.map(handleEvent))
 	    .then((result) => res.json(result))
 	    .catch((err) => {
@@ -90,9 +105,16 @@ function handleEvent(event) {
 	if (event.type !== 'message' || event.message.type !== 'text') {
 		return Promise.resolve(null)
   	}
-	// create a echoing text message
-  	const echo = { type: 'text', text: event.message.text };
+
+  	let reply = ""
+  	if(event.message.text.includes("Shiorin"))
+  		reply = "Oh! You remembered my name!"
+  	if(event.message.text.includes("Sad"))
+  		reply = "一緒に頑張りましょうね！"
+	
+	// create a  message
+  	const echo = { type: 'text', text: reply }
 
   	// use reply API
-  	return client.replyMessage(event.replyToken, echo);
+  	return client.replyMessage(event.replyToken, echo)
 }

@@ -1,0 +1,10 @@
+extends ./layout
+
+block title
+	='SCG - Restaurants'
+
+block content
+	- for(let i=0; i<output.results.length; i++)
+		br
+		= "Name: "+output.results[i].name
+					
