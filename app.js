@@ -20,7 +20,7 @@ app.get('/findxyz', urlencodedParser, scgController.findingXYZ)
 app.post('/webhook', line.middleware(config), scgController.lineWebHook)
 
 app.get('*', function(req, res){
-	res.redirect('/findxyz')
+	res.render('mainpage')
 })
 const PORT = process.env.PORT || 3000
 

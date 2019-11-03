@@ -47,13 +47,9 @@ exports.findingXYZ = function(req, res){
 	let {s1,s2,s3, ft} = req.query
 	if(typeof s1 == 'undefined' || typeof s2 == 'undefined' || typeof s3 == 'undefined' || typeof ft == 'undefined')
 	{
-		console.log('something undefined')
-		s1 = 5
-		s2 = 9
-		s3 = 15
-		ft = 2
+		const result = ``
+		res.render('findxyz', {result})
 	}
-	//console.log(`${s1}, ${s2}, ${s3}, ${ft}`)
 	let nForm = get2ndDgPolynomialFormula(parseInt(s1),parseInt(s2),parseInt(s3), parseInt(ft)) 
 	// term
 	const x = 1, 
@@ -62,11 +58,11 @@ exports.findingXYZ = function(req, res){
 
 	// term
 	const t = parseInt(ft)
-	res.send(`sequence where s${t}, s${t+1}, s${t+2} = ${s1}, ${s2}, ${s3} | x = ${nForm(x)}, y = ${nForm(y)}, z = ${nForm(z)}`)
+	const result = `sequence where s${t}, s${t+1}, s${t+2} = ${s1}, ${s2}, ${s3} | x = ${nForm(x)}, y = ${nForm(y)}, z = ${nForm(z)}`
+	res.render('findxyz', {result})
 }
 
 exports.findingRestaurantsInBangsue = function(req, res){
-	//const url = 'https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=%E0%B8%AD%E0%B8%B2%E0%B8%AB%E0%B8%B2%E0%B8%A3&inputtype=textquery&fields=formatted_address,geometry,icon,name,types&locationbias=rectangle:13.797062,100.505889|13.849573,100.545197&key=AIzaSyDr6n-dNDoMM8PavoXgwKxBofT8Rez0Z7A'
 	
 	// Key
 	const googleAPIKey = process.env.GOOGLE_API_KEY

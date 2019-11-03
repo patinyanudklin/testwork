@@ -1,0 +1,12 @@
+extends ./layout
+
+block title
+	='SCG - FindXYZ'
+
+block content
+	p Add The query to url. e.g. ?s1=5&s2=9&s3=15&ft=2
+	p s1-s3 are the consecutive term in the sequence while ft is the position of s1 
+	a(href='/findxyz?s1=5&s2=9&s3=15&ft=2')
+		p Click this to give it a try
+	= result
+					
