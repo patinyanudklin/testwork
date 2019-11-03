@@ -2,6 +2,8 @@ const request = require('request')
 const math = require('mathjs')
 
 /*
+	Find 2nd degree polynomial formula using matrix
+	ref: https://www.geeksforgeeks.org/finding-nth-term-polynomial-sequence/
 	Input: 
 		- any 3 consecutive terms of the 2nd degree polynomial sequence
 		- first of the consecutive terms 
