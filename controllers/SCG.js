@@ -49,20 +49,22 @@ exports.findingXYZ = function(req, res){
 	console.log(`x = ${nForm(x)}`)
 	console.log(`y = ${nForm(y)}`)
 	console.log(`z = ${nForm(z)}`)
+	console.log(process.env.CHANNEL_SECRET)
 	res.send("under construction")
 }
 
 exports.findingRestaurantsInBangsue = function(req, res){
 	//const url = 'https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=%E0%B8%AD%E0%B8%B2%E0%B8%AB%E0%B8%B2%E0%B8%A3&inputtype=textquery&fields=formatted_address,geometry,icon,name,types&locationbias=rectangle:13.797062,100.505889|13.849573,100.545197&key=AIzaSyDr6n-dNDoMM8PavoXgwKxBofT8Rez0Z7A'
 	
-	const key = 'AIzaSyDr6n-dNDoMM8PavoXgwKxBofT8Rez0Z7A'
+
+	const googleAPIKey = 'AIzaSyDr6n-dNDoMM8PavoXgwKxBofT8Rez0Z7A'
 	// Bangsue location
 	const lat = '13.825820'
 	const long = '100.523141'
 	// meters
 	const radius = '3500' 
 	// Nearby Search
-	const url = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${lat},${long}&radius=${radius}&type=restaurant&key=${key}`
+	const url = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${lat},${long}&radius=${radius}&type=restaurant&key=${googleAPIKey}`
 	
 	request(url, function(error, response, body){
 		if(!error&& response.statusCode == 200){

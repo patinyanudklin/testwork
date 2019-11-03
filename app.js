@@ -1,3 +1,4 @@
+require('dotenv').config()
 const express = require('express')
 const scgController = require('./controllers/SCG')
 const app = express()
