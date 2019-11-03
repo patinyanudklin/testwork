@@ -18,6 +18,10 @@ app.set('view engine', 'pug')
 app.get('/findrestaurant',  scgController.findingRestaurantsInBangsue)
 app.get('/findxyz', urlencodedParser, scgController.findingXYZ)
 app.post('/webhook', line.middleware(config), scgController.lineWebHook)
+
+app.get('*', function(req, res){
+	res.redirect('/findxyz')
+})
 const PORT = process.env.PORT || 3000
 
 app.listen(PORT)
