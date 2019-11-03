@@ -7,7 +7,6 @@ const config = {
 	channelSecret: process.env.CHANNEL_SECRET,
 }
 
-
 /*
 	Find 2nd degree polynomial formula using matrix
 	ref: https://www.geeksforgeeks.org/finding-nth-term-polynomial-sequence/
@@ -75,7 +74,7 @@ exports.findingRestaurantsInBangsue = function(req, res){
 	})
 }
 
-exports.lineWebHook = function(req, res){
+exports.lineWebHook = async function(req, res){
 	Promise
 		.all(req.body.events.map(handleEvent))
     	.then((result) => res.json(result))
